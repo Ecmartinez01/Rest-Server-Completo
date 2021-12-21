@@ -14,7 +14,7 @@ const usuarioSchema = Schema({
     type: String,
     required: [true, "La constraseña es obligatoria"],
   },
-  imagen: {
+  img: {
     type: String,
   }, 
   rol: {
@@ -34,7 +34,8 @@ const usuarioSchema = Schema({
 });
 
 usuarioSchema.methods.toJSON = function () {
-  const {__v,password, ...usuario} = this.toObject();
+  const {__v,password,_id, ...usuario} = this.toObject();
+  usuario.uid = _id
   return usuario
 } 
 module.exports = model("Usuario", usuarioSchema);

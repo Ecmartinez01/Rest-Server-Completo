@@ -1,19 +1,19 @@
 const { response, request, query } = require("express");
 const bcryptjs = require("bcryptjs");
 const Usuario = require("../models/usuario");
-const { validationResult } = require("express-validator");
 
 /// GETTT OBTENER USUARIOS
 
 const getUsuario = async(req = request, res = response) => {
   const {limit = 10,desde=0} = req.query
   const query = {estado:true}
-  const prom = await Promise.all([
+  const [usuario,total] = await Promise.all([
      Usuario.find(query).limit(Number(limit)).skip(Number(desde))
     ,Usuario.countDocuments(query)
   ])
   res.json({
-    prom
+    total,
+    usuario
   });
 };
 /// PUT 
@@ -52,7 +52,7 @@ const usuarioDelete = async(req, res = response) => {
   const {id} = req.params
   // const usuarioDelete = await Usuario.findByIdAndDelete(id)
   const usuario= await Usuario.findByIdAndUpdate(id,{estado:false})
-  res.json(usuario)
+  res.json({msj:"Borrado con exito. (Inhabilitado)",usuario})
 };
 
 //--------------------------------------------PATCH
